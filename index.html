@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Be My Valentine 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e94e77;
+            --secondary-color: #ff69b4;
+            --accent-color: #d162a4;
+            --background-start: #ff85a1;
+            --background-end: #800080;
+            --text-color: #4a4a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff;
+            animation: sparkleFloat 2s ease-out forwards;
+        }
+
+        /* Butterflies */
+        .butterfly {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 2;
+            animation: butterflyFloat 5s ease-in-out infinite;
+        }
+
+        .butterfly::before,
+        .butterfly::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 30px;
+            border-radius: 50% 50% 0 50%;
+            background: linear-gradient(45deg, #ff69b4, #9b4dca);
+            animation: wingBeat 0.8s ease-in-out infinite alternate;
+        }
+
+        .butterfly::before {
+            left: 0;
+            transform-origin: right;
+        }
+
+        .butterfly::after {
+            right: 0;
+            transform: scaleX(-1);
+            transform-origin: left;
+        }
+
+        /* Flowers */
+        .flower {
+            position: fixed;
+            z-index: 1;
+            pointer-events: none;
+            animation: flowerFloat 8s ease-in-out infinite;
+        }
+
+        .flower-center {
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .petal {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50% 50% 0 50%;
+            top: -12.5px;
+            left: -2.5px;
+            transform-origin: bottom right;
+            animation: petalWave 3s ease-in-out infinite;
+        }
+
+        .flower.purple .petal { background: linear-gradient(45deg, #9b4dca, #800080); }
+        .flower.pink .petal { background: linear-gradient(45deg, #ff69b4, #ff1493); }
+        .flower.blue .petal { background: linear-gradient(45deg, #4da6ff, #0066cc); }
+
+        /* Hearts */
+        .heart {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff69b4, #9b4dca);
+            clip-path: polygon(50% 0%, 100% 30%, 85% 100%, 50% 75%, 15% 100%, 0% 30%);
+            pointer-events: none;
+            z-index: 3;
+            filter: drop-shadow(0 0 5px rgba(255,105,180,0.5));
+            animation: heartFloat 3s ease-out forwards;
+        }
+
+        /* Container and Text */
+        .container {
+            width: 90%;
+            max-width: 380px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+            animation: containerFloat 4s ease-in-out infinite;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .title {
+            font-family: 'Great Vibes', cursive;
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        .btn {
+            width: 85%;
+            padding: 18px;
+            margin: 15px auto;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            transform: scale(1);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            box-shadow: 0 7px 20px rgba(233, 78, 119, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(45deg, #ff85a1, #ff6b8b);
+            box-shadow: 0 7px 20px rgba(255, 133, 161, 0.4);
+        }
+
+        .no-message {
+            display: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin: 20px 0;
+            animation: fadeIn 0.7s ease;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .love-message {
+            display: none;
+            padding: 25px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            animation: fadeIn 1.5s ease;
+        }
+
+        .love-message p {
+            margin: 15px 0;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+        }
+
+        /* Animations */
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 3px 3px 6px rgba(0,0,0,0.2); }
+            50% { text-shadow: 3px 3px 15px rgba(233, 78, 119, 0.5); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes wingBeat {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(30deg); }
+        }
+
+        @keyframes petalWave {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.9); }
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes sparkleFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        @keyframes butterflyFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(100px, -50px) rotate(10deg); }
+        }
+
+        @keyframes flowerFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, -50px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <h1 class="title" id="valentine-title">Will You Be My Valentine, Eden? 💖</h1>
+        <button class="btn btn-yes" id="btn-yes">Yes, I'd Love To! 💝</button>
+        <button class="btn btn-no" id="btn-no">No 💔</button>
+        <div class="no-message" id="no-message">
+            Sorry, that's not an option... My heart won't take NO for an answer, Eden! 😊
+        </div>
+        <div class="love-message" id="love-message">
+            <p>From the very first moment we met, I knew my life would be brighter with you in it. 💫</p>
+            <p>Your smile lights up my world, and your presence fills my heart with peace. 🌸</p>
+            <p>Every day with you is a new chapter of happiness, love, and endless adventures. 💖</p>
+            <p>Eden, you are my everything, and I love you more than words can ever express. 💝</p>
+        </div>
+    </div>
+    
+    
+
+    <script>
+        const container = document.getElementById('main-container');
+        const btnYes = document.getElementById('btn-yes');
+        const btnNo = document.getElementById('btn-no');
+        const noMessage = document.getElementById('no-message');
+        const loveMessage = document.getElementById('love-message');
+        const valentineTitle = document.getElementById('valentine-title');
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+            sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+
+        function createButterfly() {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'butterfly';
+            butterfly.style.left = `${Math.random() * window.innerWidth}px`;
+            butterfly.style.top = `${Math.random() * window.innerHeight}px`;
+            document.body.appendChild(butterfly);
+            setTimeout(() => butterfly.remove(), 5000);
+        }
+
+        function createFlower(color) {
+            const flower = document.createElement('div');
+            flower.className = `flower ${color}`;
+            flower.style.left = `${Math.random() * window.innerWidth}px`;
+            flower.style.top = `${Math.random() * window.innerHeight}px`;
+            document.body.appendChild(flower);
+            setTimeout(() => flower.remove(), 8000);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = `${Math.random() * window.innerWidth}px`;
+            heart.style.top = `${Math.random() * window.innerHeight}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function showLoveMessage() {
+            btnYes.style.display = 'none';
+            btnNo.style.display = 'none';
+            noMessage.style.display = 'none';
+            valentineTitle.style.display = 'none';
+
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    createHeart();
+                    createSparkle();
+                }, i * 100);
+            }
+
+            setTimeout(() => {
+                loveMessage.style.display = 'block';
+                setInterval(() => createFlower(['purple', 'pink', 'blue'][Math.floor(Math.random() * 3)]), 600);
+                setInterval(createButterfly, 2000);
+                setInterval(createSparkle, 200);
+                setInterval(() => {
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(createHeart, i * 150);
+                    }
+                }, 1500);
+            }, 2000);
+        }
+
+        btnYes.addEventListener('click', showLoveMessage);
+
+        btnNo.addEventListener('click', () => {
+            btnNo.style.display = 'none';
+            noMessage.style.display = 'block';
+            setTimeout(() => {
+                noMessage.style.display = 'none';
+                showLoveMessage();
+            }, 2000);
+        });
+
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => createFlower(['purple', 'pink', 'blue'][Math.floor(Math.random() * 3)]), i * 800);
+        }
+
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createButterfly, i * 1500);
+        }
+
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createSparkle, i * 150);
+        }
+    </script>
+</body>
+</html>
